@@ -31,7 +31,9 @@
         "semi": 1,
         "no-extra-semi": 1,
         "no-constant-condition": 1,
-        "curly": 2
+        "curly": 2,
+        "object-curly-spacing": ["warn", "always"],
+        "indent": ["warn", 4]
     },
     "settings": {
         "import/resolver": {
