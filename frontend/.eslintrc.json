@@ -33,7 +33,7 @@
         "indent": ["warn", 4],
         "no-unused-vars": 1,
         "react/jsx-first-prop-new-line": [2, "multiline"],
-        "react/jsx-max-props-per-line": [2, { "maximum": 1, "when": "multiline" }]
+        "react/jsx-max-props-per-line": [2, { "maximum": 2, "when": "multiline" }]
     },
     "settings": {
         "import/resolver": {

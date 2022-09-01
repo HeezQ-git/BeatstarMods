@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Select, MenuItem, FormControl, InputLabel, FormHelperText } from '@mui/material';
 import { Controller } from 'react-hook-form';
-import { errorMessages } from './FormMessages';
+import { errorMessages } from './messages';
 
 export const FormSelect = ({ control, name, rules, errorReason, ...props }) => (
     <Controller
@@ -10,11 +10,21 @@ export const FormSelect = ({ control, name, rules, errorReason, ...props }) => (
         name={name}
         rules={rules}
         render={({ field, fieldState: { error } }) => (
-            <FormControl error={!!error} fullWidth>
+            <FormControl
+                error={!!error}
+                fullWidth
+            >
                 <InputLabel>{props.label}</InputLabel>
-                <Select {...field} {...props} value={field.value}>
+                <Select
+                    {...field}
+                    {...props}
+                    value={field.value}
+                >
                     {props.options.map((item) => (
-                        <MenuItem key={item.value || item.label} value={item.value || item.label}>
+                        <MenuItem
+                            key={item.value || item.label}
+                            value={item.value || item.label}
+                        >
                             {item.label}
                         </MenuItem>
                     ))}

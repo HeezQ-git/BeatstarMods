@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Controller } from 'react-hook-form';
-import { errorMessages } from './FormMessages';
+import { errorMessages } from './messages';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
+import debounce from 'lodash.debounce';
 
 export const FormTextField = ({
     control,
@@ -11,12 +12,15 @@ export const FormTextField = ({
     rules,
     isError,
     errorReason,
+    debounceTime,
     getValue,
     defaultValue,
     password,
     ...props
 }) => {
     const [showPassword, setShowPassword] = useState(false);
+
+    const debouncedChangeHandler = useMemo(() => debounce((value) => getValue(value), debounceTime), []);
 
     return (
         <Controller
@@ -38,7 +42,7 @@ export const FormTextField = ({
                         }
                         onChange={(event) => {
                             onChange(event);
-                            getValue(event.target.value);
+                            debouncedChangeHandler(event.target.value);
                         }}
                         type={showPassword ? 'text' : 'password'}
                         InputProps={{
@@ -67,7 +71,7 @@ export const FormTextField = ({
                         }
                         onChange={(event) => {
                             onChange(event);
-                            getValue(event.target.value);
+                            debouncedChangeHandler(event.target.value);
                         }}
                     />
                 )
@@ -82,6 +86,7 @@ FormTextField.propTypes = {
     isError: PropTypes.bool,
     errorReason: PropTypes.string,
     rules: PropTypes.object,
+    debounceTime: PropTypes.number,
     getValue: PropTypes.func,
     defaultValue: PropTypes.string,
     helperText: PropTypes.string,
@@ -92,6 +97,7 @@ FormTextField.defaultProps = {
     isError: false,
     errorReason: errorMessages.required,
     rules: {},
+    debounceTime: 400,
     getValue: () => {},
     defaultValue: '',
     helperText: '',

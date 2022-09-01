@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormControl, FormHelperText, FormControlLabel, RadioGroup, Radio, FormLabel } from '@mui/material';
 import { Controller } from 'react-hook-form';
-import { errorMessages } from './FormMessages';
+import { errorMessages } from './messages';
 
 export const FormRadioGroup = ({ control, name, rules, errorReason, formLabel, options, ...props }) => (
     <Controller
@@ -13,7 +13,11 @@ export const FormRadioGroup = ({ control, name, rules, errorReason, formLabel, o
         render={({ field, formState: { error } }) => (
             <FormControl error={!!error}>
                 <FormLabel>{formLabel}</FormLabel>
-                <RadioGroup {...field} {...props} value={field.value}>
+                <RadioGroup
+                    {...field}
+                    {...props}
+                    value={field.value}
+                >
                     {options.map((option) => (
                         <FormControlLabel
                             key={option.value}

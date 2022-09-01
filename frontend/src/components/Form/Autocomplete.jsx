@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Autocomplete, TextField } from '@mui/material';
 import { Controller } from 'react-hook-form';
-import { errorMessages } from './FormMessages';
+import { errorMessages } from './messages';
 
 export const FormAutocomplete = ({
     control,

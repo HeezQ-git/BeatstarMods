@@ -9,7 +9,7 @@ export const LoginStyles = {
     `,
     paper: css`
         padding: 20px;
-        min-height: 500px;
+        min-height: 450px;
         width: 400px;
         display: flex;
         flex-direction: column;

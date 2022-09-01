@@ -1,11 +1,10 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const loginService = require("./service/login");
+const loginService = require('./service/login');
 
-router.post("/api/login", loginService.loginUser);
-router.post("/api/login/google-user", loginService.loginGoogleUser);
-router.post("/api/login/check-session", loginService.checkSession);
-router.post("/api/login/check-user", loginService.checkUser);
-router.post("/api/login/check-email", loginService.checkEmail);
+router.post('/api/login', loginService.loginUser);
+router.post('/api/signup', loginService.registerUser);
+router.post('/api/check-username', loginService.checkUsername);
+router.post('/api/check-email', loginService.checkEmail);
 
 module.exports = router;

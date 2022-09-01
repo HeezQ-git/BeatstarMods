@@ -1,15 +1,40 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
+@font-face {
+    font-family: 'Kiona';
+    src: url('fonts/Kiona/Kiona-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Kiona';
+    src: url('fonts/Kiona/Kiona-SemiBold.ttf') format('truetype');
+    font-weight: semi-bold;
+}
+
+@font-face {
+    font-family: 'Kiona';
+    src: url('fonts/Kiona/Kiona-Bold.ttf') format('truetype');
+    font-weight: bold;
+}
+
 *,
 root {
     margin: 0;
     padding: 0;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    overflow-x: hidden;
 }
 
 a {
     text-decoration: none;
     color: unset;
+}
+
+.MuiDivider-root {
+    margin-block: 15px !important;
 }
 
 .root {

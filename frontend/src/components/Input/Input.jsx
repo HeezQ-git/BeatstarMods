@@ -14,14 +14,16 @@ const Input = (props, { password, font, adornment, starticon, ref }) => {
     if (password && !adornment) {
         return (
             <TextField
-                ref={ref}
                 type={showPassword ? 'text' : 'password'}
                 InputLabelProps={inputProps}
                 InputProps={{
                     ...inputProps,
                     endAdornment: (
                         <InputAdornment position='end'>
-                            <IconButton onClick={handleClickShowPassword} edge='end'>
+                            <IconButton
+                                onClick={handleClickShowPassword}
+                                edge='end'
+                            >
                                 {showPassword ? <MdVisibilityOff size={22.5} /> : <MdVisibility size={22.5} />}
                             </IconButton>
                         </InputAdornment>
@@ -33,7 +35,6 @@ const Input = (props, { password, font, adornment, starticon, ref }) => {
     } else if (starticon) {
         return (
             <TextField
-                ref={ref}
                 InputLabelProps={inputProps}
                 InputProps={{
                     startAdornment: <InputAdornment position='start'>{starticon}</InputAdornment>,
@@ -42,7 +43,13 @@ const Input = (props, { password, font, adornment, starticon, ref }) => {
             />
         );
     } else {
-        return <TextField ref={ref} InputLabelProps={inputProps} InputProps={inputProps} {...props} />;
+        return (
+            <TextField
+                InputLabelProps={inputProps}
+                InputProps={inputProps}
+                {...props}
+            />
+        );
     }
 };
 

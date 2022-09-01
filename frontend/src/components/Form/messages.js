@@ -7,4 +7,6 @@ export const errorMessages = {
     confirmPassword: 'Passwords do not match',
     minLength: 'This field is too short',
     maxLength: 'This field is too long',
+    isUsernameTaken: 'This username is already taken',
+    isEmailTaken: 'This email is already taken',
 };

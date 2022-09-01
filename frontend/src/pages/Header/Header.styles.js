@@ -15,6 +15,9 @@ export const HeaderStyles = {
         cursor: pointer;
     `,
     buttons: css`
+        display: flex;
+        align-items: center;
+        gap: 10px;
         * {
             height: 100%;
         }

@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const config = require('./config');
+const loginApi = require('./API/login');
+const userApi = require('./API/user');
 
 const app = express();
 
@@ -14,7 +16,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// app.use(songsApi);
+app.use(loginApi);
+app.use(userApi);
 
 // const fileupload = require('express-fileupload');
 // app.use(fileupload());

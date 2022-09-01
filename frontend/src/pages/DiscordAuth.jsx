@@ -20,6 +20,7 @@ const DiscordAuth = () => {
             .then((response) => {
                 const { username, discriminator } = response;
                 setLoadedUser({ username, discriminator });
+                console.log(response);
             })
             .catch(console.error);
     }, []);
