@@ -1,6 +1,7 @@
-import { Box } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { isJsonValid } from '../../../utils/functions';
 
 const baseStyle = {
     display: 'flex',
@@ -17,14 +18,16 @@ const baseStyle = {
 
 export const UploadConfig = () => {
     const onDrop = useCallback((acceptedFiles) => {
-        console.log(acceptedFiles);
         const reader = new FileReader();
-        reader.onload = async (e) => {
-            const text = e.target.result;
-            console.log(text);
-            alert(text);
-        };
+
         reader.readAsText(acceptedFiles[0]);
+        reader.onload = async () => {
+            if (isJsonValid(reader.result)) {
+                console.log(true);
+            } else {
+                console.log(false);
+            }
+        };
     }, []);
 
     const [borderColor, setBorderColor] = useState('');
@@ -38,26 +41,33 @@ export const UploadConfig = () => {
         setBorderColor(
             isDragAccept ? 'success.main' : isDragReject ? 'error.main' : isDragActive ? 'primary.main' : '',
         );
+
         return {
             ...baseStyle,
         };
     }, [isFocused, isDragAccept, isDragReject]);
 
     return (
-        <Box
-            sx={{
-                width: '100%',
-                marginTop: '15px',
-                borderColor: borderColor,
-            }}
-            {...getRootProps({ style })}
+        <Paper
+            elevation={8}
+            sx={{ padding: '10px', marginTop: '15px', width: '100%', borderRadius: '5px' }}
         >
-            <input {...getInputProps()} />
-            {isDragActive && !isDragReject ? (
-                <b>Drop your config.json here!</b>
-            ) : (
-                <p>Drag and drop your config.json file here!</p>
-            )}
-        </Box>
+            <Box
+                sx={{
+                    borderColor: borderColor,
+                }}
+                {...getRootProps({ style })}
+            >
+                <input {...getInputProps()} />
+                {isDragActive && !isDragReject ? (
+                    <b>Drop your config.json here!</b>
+                ) : (
+                    <p>Drag and drop your config.json file here!</p>
+                )}
+            </Box>
+            <p style={{ marginTop: '15px', opacity: 0.4, userSelect: 'none' }}>
+                * Please note: if config file is not correct, some colors will not be loaded
+            </p>
+        </Paper>
     );
 };

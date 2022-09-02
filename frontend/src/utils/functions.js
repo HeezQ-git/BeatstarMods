@@ -44,3 +44,12 @@ export const randomColor = () => {
 };
 
 export const isAscending = (array = []) => array.every((item, index) => index === 0 || +item >= +array[index - 1]);
+
+export const isJsonValid = (json) => {
+    try {
+        JSON.parse(json);
+    } catch (e) {
+        return false;
+    }
+    return true;
+};
