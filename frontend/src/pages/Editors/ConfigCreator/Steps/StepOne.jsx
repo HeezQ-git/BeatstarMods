@@ -20,15 +20,15 @@ export const StepOne = () => {
                 className={ConfigCreatorStyles.colorSelectors}
             >
                 <ButtonGroup
-                    name={baseConfigTypes.BaseColor.name}
+                    name='BaseColor'
                     label='Base color'
                 />
                 <div className={ConfigCreatorStyles.gradientBox}>
-                    <div className={ConfigCreatorStyles.gradient(state.BaseColor.color, state.DarkColor.color)} />
+                    <div className={ConfigCreatorStyles.gradient(state.BaseColor, state.DarkColor)} />
                     <span>Result</span>
                 </div>
                 <ButtonGroup
-                    name={baseConfigTypes.DarkColor.name}
+                    name='DarkColor'
                     label='Dark color'
                 />
             </Grid>
@@ -41,10 +41,10 @@ export const StepOne = () => {
                 className={ConfigCreatorStyles.colorSelectors}
             >
                 <ButtonGroup
-                    name={baseConfigTypes.CheckpointOutlineColour.name}
+                    name='CheckpointOutlineColour'
                     label='Outline color'
                 />
-                <StageTile color={state.CheckpointOutlineColour.color} />
+                <StageTile color={state.CheckpointOutlineColour} />
             </Grid>
         </>
     );

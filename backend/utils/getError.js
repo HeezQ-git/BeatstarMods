@@ -6,6 +6,8 @@ const errors = {
         SAVE_CONFIG_FAILED: "Couldn't save config file",
         FILE_NAME_TAKEN: 'File name is already taken',
         NOT_LOGGED_IN: 'You must be logged in',
+        CONFIG_ALREADY_EXISTS: 'An identical config already exists',
+        CONFIG_NAME_TOO_SHORT: 'Config name is too short',
     },
     username: {
         USERNAME_TAKEN: 'This username is already taken',

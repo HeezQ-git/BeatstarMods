@@ -1,23 +1,43 @@
 /* eslint-disable indent */
+
+// Global imports
 import { createContext, useState } from 'react';
+import './assets/global.css';
+
+// MUI v5
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Header } from './pages/Header/Header';
-import './assets/global.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { routes } from './config/routes';
-import { Login } from './pages/Login/Login';
 import { blue } from '@mui/material/colors';
-import { SignUp } from './pages/SignUp/SignUp';
-import DiscordAuth from './pages/DiscordAuth';
 import { Button } from '@mui/material';
-import { MdClose } from 'react-icons/md';
-import { useCookies } from 'react-cookie';
+
+// Pages
+import { Login } from './pages/Login/Login';
+import { SignUp } from './pages/SignUp/SignUp';
+import { DiscordAuth } from './pages/DiscordAuth';
 import { ConfigCreator } from './pages/Editors/ConfigCreator/ConfigCreator';
 import { SelectorScreen } from './pages/Editors/ConfigCreator/SelectorScreen';
+import { EditConfig } from './pages/Editors/ConfigCreator/EditConfig';
+import { Header } from './pages/Header/Header';
+
+// Routes and routes
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { routes } from './config/routes';
+
+// Toastify
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { EditConfig } from './pages/Editors/ConfigCreator/EditConfig';
+
+// TimeAgo
+import en from 'javascript-time-ago/locale/en';
+import TimeAgo from 'javascript-time-ago';
+
+TimeAgo.addDefaultLocale(en); // add default locate when App loads
+
+// Icons
+import { MdClose } from 'react-icons/md';
+
+// Cookies
+import { useCookies } from 'react-cookie';
 
 export const ThemeContext = createContext();
 

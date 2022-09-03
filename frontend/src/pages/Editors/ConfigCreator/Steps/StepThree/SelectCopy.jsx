@@ -1,9 +1,11 @@
+/* eslint-disable indent */
 import { Button, MenuItem, Select } from '@mui/material';
 import React, { useState, useContext } from 'react';
 import { MdDone } from 'react-icons/md';
 import { stages } from '../StepThree';
 import { PropTypes } from 'prop-types';
 import { ConfigContext } from '../../ConfigCreator';
+import { toast } from 'react-toastify';
 
 export const SelectCopy = ({ stage }) => {
     const { dispatch } = useContext(ConfigContext);
@@ -56,6 +58,8 @@ export const SelectCopy = ({ stage }) => {
                 });
             });
         });
+
+        toast.success('Copied fields to selected stages');
 
         setFields([]);
         setDestination([]);

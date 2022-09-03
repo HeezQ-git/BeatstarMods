@@ -10,9 +10,8 @@ import { ConfigContext } from '../../../pages/Editors/ConfigCreator/ConfigCreato
 export const ConfigColorDialog = ({ open, setOpen, name, isStage, colorprop, canUnset }) => {
     const { state, dispatch } = useContext(ConfigContext);
 
-    const path = isStage ? state.StreakConfig.streak[name] : state[name];
-
-    const [color, setColor] = useColor('hex', path[colorprop]);
+    const path = isStage ? state.StreakConfig[name][colorprop] : state[name];
+    const [color, setColor] = useColor('hex', path);
 
     return (
         <Dialog open={open}>

@@ -40,7 +40,7 @@ export const EditDialog = ({ item, open, setDialogOpen }) => {
     return (
         <Dialog open={open}>
             <DialogTitle>Select the color & stop</DialogTitle>
-            <DialogContent>
+            <DialogContent sx={{ overflowY: 'hidden' }}>
                 <DialogContentText>Preview</DialogContentText>
                 <div
                     className={StepManagerStyles.gradientPreview(
@@ -50,7 +50,7 @@ export const EditDialog = ({ item, open, setDialogOpen }) => {
                     )}
                 />
             </DialogContent>
-            <DialogContent>
+            <DialogContent sx={{ overflowY: 'hidden' }}>
                 <Grid
                     container
                     spacing={2}
@@ -71,7 +71,7 @@ export const EditDialog = ({ item, open, setDialogOpen }) => {
                     </Grid>
                 </Grid>
             </DialogContent>
-            <DialogContent sx={{ pt: 4 }}>
+            <DialogContent sx={{ pt: 4, overflowY: 'hidden' }}>
                 <div style={{ width: '420px', marginLeft: '13px' }}>
                     <Slider
                         onChange={(_, value) => setTime(value)}

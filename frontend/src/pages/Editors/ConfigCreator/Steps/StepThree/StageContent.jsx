@@ -37,7 +37,7 @@ export const StageContent = ({ stage, hidden }) => {
                         isStage
                         canUnset
                     />
-                    <PerfectBar color={state.StreakConfig.streak[stage]?.perfectBarColor} />
+                    <PerfectBar color={state.StreakConfig[stage]?.perfectBarColor} />
                 </Grid>
                 <Divider />
                 <Grid

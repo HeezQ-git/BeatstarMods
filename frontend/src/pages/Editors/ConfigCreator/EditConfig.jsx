@@ -41,7 +41,7 @@ export const EditConfig = () => {
                 <Paper className={GS.paper}>
                     <h2>Edit config.json</h2>
                     <Divider />
-                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: '-15px' }}>
                         <Tabs
                             value={value}
                             onChange={(_, newValue) => setValue(newValue)}

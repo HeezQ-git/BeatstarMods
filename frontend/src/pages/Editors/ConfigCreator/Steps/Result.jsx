@@ -1,55 +1,28 @@
-import { Button, CircularProgress, Divider, Grid, TextField, Tooltip } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
+import { Button, CircularProgress, Divider, Grid, TextField, Tooltip } from '@mui/material';
 import { MdDone, MdDownload, MdInfoOutline, MdSave } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import { userService } from '../../../../services/user.service';
+import { createNewConfig } from '../../../../utils/functions';
 import { ConfigContext } from '../ConfigCreator';
 import { StepManagerStyles } from '../ConfigCreator.styles';
 
 export const Result = () => {
+    const { state, editMode, configName, configId } = useContext(ConfigContext);
+
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [name, setName] = useState('');
+    const [name, setName] = useState(editMode ? configName : '');
     const [saved, setSaved] = useState(false);
 
-    const { state } = useContext(ConfigContext);
-
-    const newConfig = () => ({
-        SONG_TEMPLATE: {
-            BaseColor: state.BaseColor.color.replace(/#/g, ''),
-            DarkColor: state.DarkColor.color.replace(/#/g, ''),
-            ColorGradient: state.ColorGradient.gradient
-                .filter((item) => !state.ColorGradient.toRemoved.includes(item.id))
-                .map((item) => ({
-                    color: item.color.replace(/#/g, ''),
-                    time: item.time,
-                })),
-            CheckpointOutlineColour: state.CheckpointOutlineColour.color.replace(/#/g, ''),
-            ColorGradientInGame: state.ColorGradientInGame.gradient
-                .filter((item) => !state.ColorGradientInGame.toRemoved.includes(item.id))
-                .map((item) => ({
-                    color: item.color.replace(/#/g, ''),
-                    time: item.time,
-                })),
-            StreakConfig: state.StreakConfig.streak.map((item) => ({
-                glowColor: item.glowColor.replace(/#/g, ''),
-                perfectBarColor: item.perfectBarColor.replace(/#/g, ''),
-                invertPerfectBar: `${item.invertPerfectBar}`,
-                VFXColor: item.VFXColor.replace(/#/g, ''),
-            })),
-            TrackIntensityGlow: state.TrackIntensityGlow.color.replace(/#/g, ''),
-            VFXColor: state.VFXColor.color.replace(/#/g, ''),
-            VFXAlternativeColor: state.VFXAlternativeColor.color.replace(/#/g, ''),
-        },
-    });
-
     const createFinalConfig = async () => {
-        const config = JSON.stringify(newConfig(), null, 4);
+        const config = JSON.stringify(createNewConfig(state), null, 4);
         const blob = new Blob([config], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
 
         setFile(url);
         setLoading(false);
+
         return !!url;
     };
 
@@ -62,29 +35,52 @@ export const Result = () => {
     };
 
     const saveConfig = async () => {
-        const config = newConfig();
+        const config = createNewConfig(state);
         const configString = JSON.stringify(config, null, 4);
 
         try {
-            const { data } = await toast.promise(
-                userService.saveConfig({ config: configString, name }),
-                {
-                    pending: 'Saving config...',
-                    success: `Config ${name ? `"${name}"` : ''} saved!`,
-                    error: {
-                        render({ data }) {
-                            return `${data.response.data.errorInfo.msg}`;
+            if (!editMode) {
+                const { data } = await toast.promise(
+                    userService.saveConfig({ config: configString, name }),
+                    {
+                        pending: 'Saving config...',
+                        success: `Config ${name ? `"${name}"` : ''} saved!`,
+                        error: {
+                            render({ data }) {
+                                return `${data.response.data.errorInfo.msg}`;
+                            },
                         },
                     },
-                },
-                {
-                    toastId: 'saveConfig',
-                },
-            );
+                    {
+                        toastId: 'saveConfig',
+                    },
+                );
 
-            if (data.success) {
-                setSaved(true);
+                if (data.success) {
+                    setSaved(true);
+                }
+            } else {
+                const { data } = await toast.promise(
+                    userService.updateConfig({ config: configString, name, configId: configId }),
+                    {
+                        pending: 'Updating config...',
+                        success: `Config ${name ? `"${name}"` : ''} updated!`,
+                        error: {
+                            render({ data }) {
+                                return `${data.response.data.errorInfo.msg}`;
+                            },
+                        },
+                    },
+                    {
+                        toastId: 'saveConfig',
+                    },
+                );
+
+                if (data.success) {
+                    setSaved(true);
+                }
             }
+
             // eslint-disable-next-line no-empty
         } catch (error) {}
     };
@@ -149,7 +145,11 @@ export const Result = () => {
                     </div>
                     <div className={StepManagerStyles.resultBox}>
                         <h2>&#x2728; Everything is ready!</h2>
-                        <span>Would you like to save this config in your collection?</span>
+                        <span>
+                            {editMode
+                                ? 'Would you like to save (or rename) your edited config file?'
+                                : 'Would you like to save this config in your collection?'}
+                        </span>
                         <div className={StepManagerStyles.subBox}>
                             <div className={StepManagerStyles.input}>
                                 <TextField

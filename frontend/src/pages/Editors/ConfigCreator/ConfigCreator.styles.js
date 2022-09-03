@@ -75,7 +75,7 @@ export const StepManagerStyles = {
     gradientPreview: (gradient, size = 200, type = 'radial') => css`
         width: ${size}px;
         aspect-ratio: 1;
-        border: 2px solid white;
+        border: 1px solid #212121;
         border-radius: 10px;
         // prettier-ignore
         background: ${type}-gradient(
@@ -118,7 +118,7 @@ export const StepManagerStyles = {
         height: ${size}px;
         border-radius: 5px;
         background: ${color};
-        border: 1px solid white;
+        border: 1px solid #212121;
     `,
     addColorIcon: css`
         display: flex;
@@ -184,6 +184,11 @@ export const CollectionStyles = {
         border-radius: 3px;
         background: #${color};
         border: 1px solid #ffffff60;
+    `,
+    tableCellTrucate: css`
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     `,
 };
 

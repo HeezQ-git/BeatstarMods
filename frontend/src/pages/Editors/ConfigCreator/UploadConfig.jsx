@@ -1,6 +1,10 @@
 import { Box, Paper } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
+import { routes } from '../../../config/routes';
+import { userService } from '../../../services/user.service';
 import { isJsonValid } from '../../../utils/functions';
 
 const baseStyle = {
@@ -17,15 +21,35 @@ const baseStyle = {
 };
 
 export const UploadConfig = () => {
+    const navigate = useNavigate();
+
     const onDrop = useCallback((acceptedFiles) => {
         const reader = new FileReader();
 
         reader.readAsText(acceptedFiles[0]);
         reader.onload = async () => {
-            if (isJsonValid(reader.result)) {
-                console.log(true);
-            } else {
-                console.log(false);
+            try {
+                if (isJsonValid(reader.result)) {
+                    const { data } = await toast.promise(userService.saveConfig({ config: reader.result }), {
+                        pending: 'Uploading config...',
+                        success: 'Config uploaded, redirecting...',
+                        error: {
+                            render: (err) => {
+                                return err.data?.response?.data?.errorInfo?.msg || 'Error uploading config';
+                            },
+                        },
+                    });
+
+                    setTimeout(() => {
+                        if (data.success) {
+                            navigate(`${routes.editConfig}/${data.configId}`);
+                        }
+                    }, 500);
+                } else {
+                    toast.error('Invalid config file!');
+                }
+            } catch (err) {
+                toast.error(err);
             }
         };
     }, []);

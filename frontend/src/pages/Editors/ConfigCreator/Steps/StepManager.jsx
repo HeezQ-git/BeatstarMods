@@ -1,6 +1,7 @@
 /* eslint-disable indent */
 import React, { useContext } from 'react';
 import { ConfigContext } from '../ConfigCreator';
+
 import { Result } from './Result';
 import { StepFour } from './StepFour';
 import { StepOne } from './StepOne';

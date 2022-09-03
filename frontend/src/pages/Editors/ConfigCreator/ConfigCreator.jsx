@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useReducer, useState } from 'react';
-import { Divider, Grid, Paper, Step, StepLabel, Stepper } from '@mui/material';
+import { Divider, Grid, Paper, Step, StepButton, StepLabel, Stepper } from '@mui/material';
 import { GS } from '../../../assets/global.styles';
 import { baseConfigTypes } from '../../../config/variables';
 import { configCreatorReducer } from '../../../hooks/configCreatorReducer';
@@ -8,12 +8,14 @@ import { StepManager } from './Steps/StepManager';
 import { PropTypes } from 'prop-types';
 import { userService } from '../../../services/user.service';
 import { useParams } from 'react-router';
+import { toast } from 'react-toastify';
 
 export const ConfigContext = createContext();
 
 export const ConfigCreator = ({ editMode }) => {
     const [state, dispatch] = useReducer(configCreatorReducer, baseConfigTypes);
     const [step, setStep] = useState(0);
+    const [configName, setConfigName] = useState('');
 
     const steps = ['Base', 'Gradients', 'Streak', 'Final'];
     const amountOfSteps = steps.length;
@@ -26,6 +28,9 @@ export const ConfigCreator = ({ editMode }) => {
         step,
         setStep,
         amountOfSteps,
+        editMode,
+        configName,
+        configId,
     };
 
     useEffect(() => {
@@ -34,9 +39,23 @@ export const ConfigCreator = ({ editMode }) => {
         }
 
         (async () => {
-            const { data } = userService.getConfig({ configId });
+            const { data } = await toast.promise(userService.getConfig({ configId }), {
+                pending: 'Loading config...',
+                success: 'Config loaded!',
+                error: {
+                    render({ data }) {
+                        window.location.reload();
+                        return data?.response?.data?.errorInfo?.msg || 'Error loading config, please refresh the page';
+                    },
+                },
+            });
 
-            console.log(data);
+            dispatch({
+                type: 'SET_CONFIG',
+                payload: data.config?.SongTemplate,
+            });
+
+            setConfigName(data.configName);
         })();
     }, []);
 
@@ -59,12 +78,22 @@ export const ConfigCreator = ({ editMode }) => {
                     }}
                 >
                     <Paper className={GS.paper}>
-                        <span className={GS.title}>Create new config.json</span>
+                        <span className={GS.title}>
+                            {editMode ? `Editing: ${configName}` : 'Create new config.json'}
+                        </span>
                         <Divider />
-                        <Stepper activeStep={step}>
+                        <Stepper
+                            nonLinear
+                            activeStep={step}
+                        >
                             {steps.map((label) => (
                                 <Step key={label}>
-                                    <StepLabel>{label}</StepLabel>
+                                    <StepButton
+                                        color='inherit'
+                                        onClick={() => setStep(steps.indexOf(label))}
+                                    >
+                                        <StepLabel>{label}</StepLabel>
+                                    </StepButton>
                                 </Step>
                             ))}
                         </Stepper>

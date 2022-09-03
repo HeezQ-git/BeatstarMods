@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const DiscordAuth = () => {
+export const DiscordAuth = () => {
     const [loadedUser, setLoadedUser] = useState();
 
     useEffect(() => {
@@ -32,5 +32,3 @@ const DiscordAuth = () => {
         </div>
     );
 };
-
-export default DiscordAuth;

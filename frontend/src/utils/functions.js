@@ -53,3 +53,32 @@ export const isJsonValid = (json) => {
     }
     return true;
 };
+
+export const createNewConfig = (state) => ({
+    SongTemplate: {
+        BaseColor: state.BaseColor.replace(/#/g, ''),
+        DarkColor: state.DarkColor.replace(/#/g, ''),
+        ColorGradient: state.ColorGradient.gradient
+            .filter((item) => !state.ColorGradient.toRemoved.includes(item.id))
+            .map((item) => ({
+                color: item.color.replace(/#/g, ''),
+                time: item.time,
+            })),
+        CheckpointOutlineColour: state.CheckpointOutlineColour.replace(/#/g, ''),
+        ColorGradientInGame: state.ColorGradientInGame.gradient
+            .filter((item) => !state.ColorGradientInGame.toRemoved.includes(item.id))
+            .map((item) => ({
+                color: item.color.replace(/#/g, ''),
+                time: item.time,
+            })),
+        StreakConfig: state.StreakConfig.map((item) => ({
+            glowColor: item.glowColor.replace(/#/g, ''),
+            perfectBarColor: item.perfectBarColor.replace(/#/g, ''),
+            invertPerfectBar: `${item.invertPerfectBar}`,
+            VFXColor: item.VFXColor.replace(/#/g, ''),
+        })),
+        TrackIntensityGlow: state.TrackIntensityGlow.replace(/#/g, ''),
+        VFXColor: state.VFXColor.replace(/#/g, ''),
+        VFXAlternativeColor: state.VFXAlternativeColor.replace(/#/g, ''),
+    },
+});

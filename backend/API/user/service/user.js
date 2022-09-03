@@ -31,30 +31,67 @@ const saveConfig = async (req, res) => {
                     fs.mkdirSync(dir);
                 }
 
-                const randomId = Math.random().toString(36).substr(2, 9);
+                let doesConfigExist = false;
 
-                fs.writeFileSync(
-                    `${dir}/${randomId}.json`,
-                    req.body.config,
-                    (err) => {
-                        if (err) {
-                            response.errorInfo = getError(
-                                'user',
-                                'SAVE_CONFIG_FAILED'
-                            );
-                            return res.status(500).send(response);
-                        }
+                const files = await fs.promises.readdir(dir);
+
+                for await (const file of files) {
+                    const fileContent = await fs.readFileSync(
+                        dir + file,
+                        'utf8'
+                    );
+
+                    if (fileContent === req.body.config) {
+                        doesConfigExist = true;
+                        break;
                     }
-                );
+                }
 
-                userDB.files.config.push({
-                    file: randomId,
-                    name: req.body.name || 'Untitled',
-                    created: new Date(),
-                });
+                if (!req.body.name || req.body.name.length >= 2) {
+                    if (!doesConfigExist) {
+                        const randomId = Math.random()
+                            .toString(36)
+                            .substr(2, 9);
 
-                await userDB.save();
-                response.success = true;
+                        await fs.writeFileSync(
+                            `${dir}/${randomId}.json`,
+                            req.body.config,
+                            (err) => {
+                                if (err) {
+                                    response.errorInfo = getError(
+                                        'user',
+                                        'SAVE_CONFIG_FAILED'
+                                    );
+                                    return res.status(500).send(response);
+                                }
+                            }
+                        );
+
+                        userDB.files.config.push({
+                            file: randomId,
+                            name: req.body.name || 'Untitled',
+                            created: new Date(),
+                        });
+
+                        await userDB.save();
+
+                        response.success = true;
+                        response.configId =
+                            userDB.files.config[
+                                userDB.files.config.length - 1
+                            ]._id.toString();
+                    } else {
+                        response.errorInfo = getError(
+                            'user',
+                            'CONFIG_ALREADY_EXISTS'
+                        );
+                    }
+                } else {
+                    response.errorInfo = getError(
+                        'user',
+                        'CONFIG_NAME_TOO_SHORT'
+                    );
+                }
             } else {
                 response.errorInfo = getError('user', 'FILE_NAME_TAKEN');
             }
@@ -63,9 +100,10 @@ const saveConfig = async (req, res) => {
         }
     } catch (err) {
         response.errorInfo = getError('other', 'UNEXPECTED');
+        console.log(err);
     }
 
-    return res.status(response.errorInfo?.msg ? 400 : 200).json(response);
+    return res.status(response.errorInfo?.msg ? 550 : 200).json(response);
 };
 
 const getConfig = async (req, res) => {
@@ -73,6 +111,7 @@ const getConfig = async (req, res) => {
         success: false,
         errorInfo: '',
         config: {},
+        configName: '',
     };
 
     try {
@@ -81,7 +120,7 @@ const getConfig = async (req, res) => {
 
         if (userDB) {
             const config = userDB.files.config.find(
-                (file) => file.file === req.query.configId
+                (file) => file._id.toString() === req.body.configId
             );
 
             if (config) {
@@ -92,6 +131,8 @@ const getConfig = async (req, res) => {
                         `./files/${user.username}/config/${config.file}.json`
                     )
                 );
+
+                response.configName = config.name;
             } else {
                 response.errorInfo = getError('user', 'FILE_NOT_EXIST');
             }
@@ -102,7 +143,7 @@ const getConfig = async (req, res) => {
         response.errorInfo = getError('other', 'UNEXPECTED');
     }
 
-    return res.status(response.errorInfo?.msg ? 400 : 200).json(response);
+    return res.status(response.errorInfo?.msg ? 550 : 200).json(response);
 };
 
 const getConfigs = async (req, res) => {
@@ -133,7 +174,7 @@ const getConfigs = async (req, res) => {
         response.error = err;
     }
 
-    return res.status(response.errorInfo?.msg ? 400 : 200).json(response);
+    return res.status(response.errorInfo?.msg ? 550 : 200).json(response);
 };
 
 const deleteConfig = async (req, res) => {
@@ -174,7 +215,69 @@ const deleteConfig = async (req, res) => {
         response.error = err;
     }
 
-    return res.status(response.errorInfo?.msg ? 400 : 200).json(response);
+    return res.status(response.errorInfo?.msg ? 550 : 200).json(response);
+};
+
+const updateConfig = async (req, res) => {
+    let response = {
+        success: false,
+        errorInfo: '',
+    };
+
+    try {
+        const { user } = req.user;
+        const userDB = await users.findOne({ username: user.username });
+
+        if (userDB) {
+            const config = userDB.files.config.find(
+                (file) => file._id.toString() === req.body.configId
+            );
+
+            if (config) {
+                if (!req.body.name || req.body.name.length >= 2) {
+                    if (!req.body.updateNameOnly)
+                        await fs.writeFileSync(
+                            `./files/${user.username}/config/${config.file}.json`,
+                            req.body.config,
+                            (err) => {
+                                if (err) {
+                                    response.errorInfo = getError(
+                                        'user',
+                                        'SAVE_CONFIG_FAILED'
+                                    );
+
+                                    return res.status(500).send(response);
+                                }
+                            }
+                        );
+
+                    if (req.body.name) {
+                        config.name = req.body.name;
+                    }
+
+                    config.updated = Date.now();
+
+                    await userDB.save();
+
+                    response.success = true;
+                } else {
+                    response.errorInfo = getError(
+                        'user',
+                        'CONFIG_NAME_TOO_SHORT'
+                    );
+                }
+            } else {
+                response.errorInfo = getError('user', 'FILE_NOT_EXIST');
+            }
+        } else {
+            response.errorInfo = getError('user', 'USER_NOT_EXIST');
+        }
+    } catch (err) {
+        response.errorInfo = getError('other', 'UNEXPECTED');
+        response.error = err;
+    }
+
+    return res.status(response.errorInfo?.msg ? 550 : 200).json(response);
 };
 
 module.exports = {
@@ -182,4 +285,5 @@ module.exports = {
     getConfig,
     getConfigs,
     deleteConfig,
+    updateConfig,
 };

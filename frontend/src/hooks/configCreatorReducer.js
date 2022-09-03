@@ -11,6 +11,7 @@ export const ACTION_TYPES = {
     GRADIENT_SORT: 'GRADIENT_SORT',
     SET_STREAK_COLOR: 'SET_STREAK_COLOR',
     COPY_FIELD: 'COPY_FIELD',
+    SET_CONFIG: 'SET_CONFIG',
 };
 
 export const configCreatorReducer = (state, action) => {
@@ -23,10 +24,7 @@ export const configCreatorReducer = (state, action) => {
         case ACTION_TYPES.SET_COLOR:
             return {
                 ...state,
-                [action.configColorType]: {
-                    ...state[action.configColorType],
-                    color: action.payload,
-                },
+                [action.configColorType]: action.payload,
             };
         case ACTION_TYPES.SET_GRADIENT:
             return {
@@ -93,31 +91,57 @@ export const configCreatorReducer = (state, action) => {
         case ACTION_TYPES.SET_STREAK_COLOR:
             return {
                 ...state,
-                StreakConfig: {
-                    ...state.StreakConfig,
-                    streak: state.StreakConfig.streak.map((item, index) => {
-                        if (index === action.configColorType) {
-                            return { ...item, [action.payload.type]: action.payload.color };
-                        }
-                        return item;
-                    }),
-                },
+                StreakConfig: state.StreakConfig.map((item, index) => {
+                    if (index === action.configColorType) {
+                        return { ...item, [action.payload.type]: action.payload.color };
+                    }
+                    return item;
+                }),
             };
         case ACTION_TYPES.COPY_FIELD:
             return {
                 ...state,
-                StreakConfig: {
-                    ...state.StreakConfig,
-                    streak: state.StreakConfig.streak.map((item, index) => {
-                        if (index === action.payload.destinationStage) {
-                            return {
-                                ...item,
-                                [action.payload.field]:
-                                    state.StreakConfig.streak[action.payload.stage][action.payload.field],
-                            };
-                        }
-                        return item;
-                    }),
+                StreakConfig: state.StreakConfig.map((item, index) => {
+                    if (index === action.payload.destinationStage) {
+                        return {
+                            ...item,
+                            [action.payload.field]: state.StreakConfig[action.payload.stage][action.payload.field],
+                        };
+                    }
+                    return item;
+                }),
+            };
+        case ACTION_TYPES.SET_CONFIG:
+            return {
+                ...state,
+                BaseColor: `#${action.payload.BaseColor}`,
+                DarkColor: `#${action.payload.DarkColor}`,
+                CheckpointOutlineColour: `#${action.payload.CheckpointOutlineColour}`,
+                TrackIntensityGlow: `#${action.payload.TrackIntensityGlow}`,
+                VFXColor: `#${action.payload.VFXColor}`,
+                VFXAlternativeColor: `#${action.payload.VFXAlternativeColor}`,
+                StreakConfig: action.payload.StreakConfig.map((item) => ({
+                    ...item,
+                    VFXColor: `#${item.VFXColor}`,
+                    glowColor: `#${item.glowColor}`,
+                    perfectBarColor: item.perfectBarColor ? `#${item.perfectBarColor}` : '',
+                    invertPerfectBar: Boolean(item.invertPerfectBar),
+                })),
+                ColorGradient: {
+                    ...state.ColorGradient,
+                    gradient: action.payload.ColorGradient.map((item, index) => ({
+                        ...item,
+                        color: `#${item.color}`,
+                        id: index,
+                    })),
+                },
+                ColorGradientInGame: {
+                    ...state.ColorGradientInGame,
+                    gradient: action.payload.ColorGradientInGame.map((item, index) => ({
+                        ...item,
+                        color: `#${item.color}`,
+                        id: index,
+                    })),
                 },
             };
         default:

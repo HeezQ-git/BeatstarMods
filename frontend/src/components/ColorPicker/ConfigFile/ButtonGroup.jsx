@@ -9,16 +9,16 @@ export const ButtonGroup = ({ name, label, color, isStage, canUnset }) => {
     const [open, setOpen] = useState(false);
     const { state } = useContext(ConfigContext);
 
-    const path = isStage ? state.StreakConfig.streak[name] : state[name];
+    const path = isStage ? state.StreakConfig[name][color] : state[name];
 
     return (
         <div className={ButtonGroupStyles.buttonGroup}>
             <div className={ButtonGroupStyles.buttonGroupBox}>
                 <div
-                    className={ButtonGroupStyles.colorBox(path[color])}
+                    className={ButtonGroupStyles.colorBox(path)}
                     onClick={() => setOpen(true)}
                 >
-                    {!path[color] && 'EMPTY'}
+                    {!path && 'EMPTY'}
                 </div>
                 <span>
                     <Button

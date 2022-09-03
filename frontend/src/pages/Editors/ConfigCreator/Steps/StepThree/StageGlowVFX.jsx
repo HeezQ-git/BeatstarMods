@@ -25,8 +25,8 @@ export const StageGlowVFX = ({ stage }) => {
             />
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
                 <Tile
-                    VFX={showVFX ? state.StreakConfig.streak[stage]?.VFXColor : ''}
-                    color={state.StreakConfig.streak[stage]?.glowColor}
+                    VFX={showVFX ? state.StreakConfig[stage]?.VFXColor : ''}
+                    color={state.StreakConfig[stage]?.glowColor}
                 />
                 <FormControlLabel
                     onChange={() => setShowVFX((prevValue) => !prevValue)}
