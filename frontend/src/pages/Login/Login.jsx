@@ -13,6 +13,7 @@ import { loginService } from '../../services/login.service';
 import { GS } from '../../assets/global.styles';
 import { useCookies } from 'react-cookie';
 import { useErrorHandler } from '../../hooks/useErrorHandler';
+import { routes } from '../../config/routes';
 
 export const Login = () => {
     const [isReady, setReady] = useState(false);
@@ -44,7 +45,7 @@ export const Login = () => {
         } else {
             clearError('all');
             setCookie('token', data.token, { path: '/' });
-            navigate('/profile/');
+            window.location.href = routes.profile;
         }
 
         setLoading(false);

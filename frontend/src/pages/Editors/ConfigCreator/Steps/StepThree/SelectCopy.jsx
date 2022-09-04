@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import { Button, MenuItem, Select } from '@mui/material';
+import { Button, Grid, MenuItem, Select } from '@mui/material';
 import React, { useState, useContext } from 'react';
 import { MdDone } from 'react-icons/md';
 import { stages } from '../StepThree';
@@ -66,8 +66,20 @@ export const SelectCopy = ({ stage }) => {
     };
 
     return (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+        <Grid
+            flexDirection={{
+                xs: 'column',
+                md: 'row',
+            }}
+            sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+        >
+            <Grid
+                flexDirection={{
+                    xs: 'column',
+                    md: 'row',
+                }}
+                sx={{ display: 'flex', alignItems: 'center', gap: '15px' }}
+            >
                 <span>Copy</span>
                 <div style={{ width: '150px' }}>
                     <Select
@@ -111,7 +123,7 @@ export const SelectCopy = ({ stage }) => {
                         ))}
                     </Select>
                 </div>
-            </div>
+            </Grid>
             <div style={{ alignSelf: 'flex-end' }}>
                 <Button
                     variant='outlined'
@@ -121,7 +133,7 @@ export const SelectCopy = ({ stage }) => {
                     Confirm
                 </Button>
             </div>
-        </div>
+        </Grid>
     );
 };
 

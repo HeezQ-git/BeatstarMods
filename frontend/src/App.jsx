@@ -16,7 +16,7 @@ import { SignUp } from './pages/SignUp/SignUp';
 import { DiscordAuth } from './pages/DiscordAuth';
 import { ConfigCreator } from './pages/Editors/ConfigCreator/ConfigCreator';
 import { SelectorScreen } from './pages/Editors/ConfigCreator/SelectorScreen';
-import { EditConfig } from './pages/Editors/ConfigCreator/EditConfig';
+import { EditConfig } from './pages/Editors/ConfigCreator/EditConfig/EditConfig';
 import { Header } from './pages/Header/Header';
 
 // Routes and routes
@@ -38,8 +38,10 @@ import { MdClose } from 'react-icons/md';
 
 // Cookies
 import { useCookies } from 'react-cookie';
+import { Workshop } from './pages/Workshop/Workshop';
+import { UploadSong } from './pages/Workshop/UploadSong/UploadSong';
 
-export const ThemeContext = createContext();
+export const AppContext = createContext();
 
 function App() {
     const [cookies, setCookie] = useCookies(['mobile-device-warning']);
@@ -81,9 +83,13 @@ function App() {
         setCookie('theme', 'light', { path: '/' });
     }
 
+    const AppContextValues = {
+        isMobile,
+    };
+
     return (
         <BrowserRouter>
-            <ThemeContext.Provider value={mode}>
+            <AppContext.Provider value={AppContextValues}>
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
                     {isMobile && !cookies['mobile-device-warning'] ? (
@@ -100,52 +106,62 @@ function App() {
                             </Button>
                         </div>
                     ) : null}
-                    <Header
-                        theme={mode}
-                        changeTheme={changeTheme}
-                    />
-                    <div className='root'>
-                        <Routes>
-                            <Route
-                                path={routes.root}
-                                element={<div>Home</div>}
-                            />
-                            <Route
-                                path={routes.login}
-                                element={<Login />}
-                            />
-                            <Route
-                                path={routes.signup}
-                                element={<SignUp />}
-                            />
-                            <Route
-                                path={routes.discordAuth}
-                                element={<DiscordAuth />}
-                            />
-                            <Route
-                                path={routes.selectorScreen}
-                                element={<SelectorScreen />}
-                            />
-                            <Route
-                                path={routes.configCreator}
-                                element={<ConfigCreator />}
-                            />
-                            <Route
-                                path={routes.editConfig}
-                                element={<EditConfig />}
-                            />
-                            <Route
-                                path={routes.editConfigId}
-                                element={<ConfigCreator editMode />}
-                            />
-                        </Routes>
-                        <ToastContainer
-                            newestOnTop
-                            limit={3}
+                    <div style={{ overflow: 'hidden' }}>
+                        <Header
+                            theme={mode}
+                            changeTheme={changeTheme}
                         />
+                        <div className='root'>
+                            <Routes>
+                                <Route
+                                    path={routes.root}
+                                    element={<div>Home</div>}
+                                />
+                                <Route
+                                    path={routes.login}
+                                    element={<Login />}
+                                />
+                                <Route
+                                    path={routes.signup}
+                                    element={<SignUp />}
+                                />
+                                <Route
+                                    path={routes.discordAuth}
+                                    element={<DiscordAuth />}
+                                />
+                                <Route
+                                    path={routes.selectorScreen}
+                                    element={<SelectorScreen />}
+                                />
+                                <Route
+                                    path={routes.configCreator}
+                                    element={<ConfigCreator />}
+                                />
+                                <Route
+                                    path={routes.editConfig}
+                                    element={<EditConfig />}
+                                />
+                                <Route
+                                    path={routes.editConfigId}
+                                    element={<ConfigCreator editMode />}
+                                />
+                                <Route
+                                    path={routes.workshop}
+                                    element={<Workshop />}
+                                />
+                                <Route
+                                    path={routes.uploadSong}
+                                    element={<UploadSong />}
+                                />
+                            </Routes>
+                            <ToastContainer
+                                newestOnTop
+                                limit={3}
+                            />
+                        </div>
                     </div>
                 </ThemeProvider>
-            </ThemeContext.Provider>
+            </AppContext.Provider>
         </BrowserRouter>
     );
 }

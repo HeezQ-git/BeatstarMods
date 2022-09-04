@@ -1,7 +1,7 @@
 import { Button, Divider, Grid, Paper, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
-import { MdEdit, MdOutlineInsertDriveFile } from 'react-icons/md';
+import { MdOutlineEdit, MdOutlineInsertDriveFile } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { GS } from '../../../assets/global.styles';
 import { routes } from '../../../config/routes';
@@ -86,14 +86,14 @@ export const SelectorScreen = () => {
                                     color='text.secondary'
                                     sx={{ fontSize: 14, textAlign: 'left' }}
                                 >
-                                    Edit an already existing config that you&apos;ve created!
+                                    Edit an existing config or upload your own!
                                 </Typography>
                                 <Box
                                     textAlign='right'
                                     mt='10px'
                                 >
                                     <Link to={routes.editConfig}>
-                                        <Button startIcon={<MdEdit />}>Edit</Button>
+                                        <Button startIcon={<MdOutlineEdit />}>Edit</Button>
                                     </Link>
                                 </Box>
                             </Paper>

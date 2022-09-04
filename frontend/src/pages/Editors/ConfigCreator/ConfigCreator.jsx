@@ -1,5 +1,5 @@
-import React, { createContext, useEffect, useReducer, useState } from 'react';
-import { Divider, Grid, Paper, Step, StepButton, StepLabel, Stepper } from '@mui/material';
+import React, { createContext, useEffect, useReducer, useState, useContext } from 'react';
+import { Divider, Grid, LinearProgress, Paper, Step, StepButton, StepLabel, Stepper } from '@mui/material';
 import { GS } from '../../../assets/global.styles';
 import { baseConfigTypes } from '../../../config/variables';
 import { configCreatorReducer } from '../../../hooks/configCreatorReducer';
@@ -9,6 +9,7 @@ import { PropTypes } from 'prop-types';
 import { userService } from '../../../services/user.service';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
+import { AppContext } from '../../../App';
 
 export const ConfigContext = createContext();
 
@@ -16,6 +17,9 @@ export const ConfigCreator = ({ editMode }) => {
     const [state, dispatch] = useReducer(configCreatorReducer, baseConfigTypes);
     const [step, setStep] = useState(0);
     const [configName, setConfigName] = useState('');
+    const [loading, setLoading] = useState(true);
+
+    const { isMobile } = useContext(AppContext);
 
     const steps = ['Base', 'Gradients', 'Streak', 'Final'];
     const amountOfSteps = steps.length;
@@ -35,10 +39,13 @@ export const ConfigCreator = ({ editMode }) => {
 
     useEffect(() => {
         if (!editMode) {
+            setLoading(false);
             return;
         }
 
         (async () => {
+            setLoading(true);
+
             const { data } = await toast.promise(userService.getConfig({ configId }), {
                 pending: 'Loading config...',
                 success: 'Config loaded!',
@@ -56,6 +63,8 @@ export const ConfigCreator = ({ editMode }) => {
             });
 
             setConfigName(data.configName);
+
+            setLoading(false);
         })();
     }, []);
 
@@ -81,24 +90,37 @@ export const ConfigCreator = ({ editMode }) => {
                         <span className={GS.title}>
                             {editMode ? `Editing: ${configName}` : 'Create new config.json'}
                         </span>
-                        <Divider />
-                        <Stepper
-                            nonLinear
-                            activeStep={step}
-                        >
-                            {steps.map((label) => (
-                                <Step key={label}>
-                                    <StepButton
-                                        color='inherit'
-                                        onClick={() => setStep(steps.indexOf(label))}
+                        {!loading ? (
+                            <div>
+                                <Divider />
+                                {!isMobile && (
+                                    <Stepper
+                                        nonLinear
+                                        activeStep={step}
                                     >
-                                        <StepLabel>{label}</StepLabel>
-                                    </StepButton>
-                                </Step>
-                            ))}
-                        </Stepper>
-                        <StepManager />
-                        <ConfigNavigation />
+                                        {steps.map((label) => (
+                                            <Step key={label}>
+                                                <StepButton
+                                                    color='inherit'
+                                                    onClick={() => setStep(steps.indexOf(label))}
+                                                >
+                                                    <StepLabel>{label}</StepLabel>
+                                                </StepButton>
+                                            </Step>
+                                        ))}
+                                    </Stepper>
+                                )}
+                                <StepManager />
+                                <ConfigNavigation />
+                            </div>
+                        ) : (
+                            <div style={{ marginTop: '15px' }}>
+                                <LinearProgress />
+                                <p style={{ marginTop: '15px', fontSize: '18px', fontWeight: 600 }}>
+                                    Loading content, please wait...
+                                </p>
+                            </div>
+                        )}
                     </Paper>
                 </Grid>
             </Grid>

@@ -1,10 +1,10 @@
 import { Divider, Grid, Paper, Tab, Tabs } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
-import { GS } from '../../../assets/global.styles';
+import { GS } from '../../../../assets/global.styles';
 import { ConfigCollection } from './ConfigCollection';
 import { useNavigate } from 'react-router-dom';
-import { routes } from '../../../config/routes';
+import { routes } from '../../../../config/routes';
 import { UploadConfig } from './UploadConfig';
 import { MdList, MdUploadFile } from 'react-icons/md';
 
@@ -29,10 +29,10 @@ export const EditConfig = () => {
             <Grid
                 item
                 xs={12}
-                sm={6}
-                md={8}
+                sm={10}
+                md={9}
                 lg={8}
-                xl={6}
+                xl={7}
                 py={{
                     xs: 2,
                 }}

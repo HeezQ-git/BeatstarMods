@@ -15,9 +15,23 @@ export const StageContent = ({ stage, hidden }) => {
             <div>
                 <Grid
                     item
-                    sx={{ display: 'flex', alignItems: 'flex-end', pb: '10px' }}
+                    sx={{
+                        display: 'flex',
+                        alignItems: {
+                            xs: 'center',
+                            md: 'flex-end',
+                        },
+                        gap: {
+                            xs: '20px',
+                            md: '0px',
+                        },
+                        pb: '10px',
+                    }}
                     justifyContent='space-evenly'
-                    flexDirection='row'
+                    flexDirection={{
+                        xs: 'column',
+                        md: 'row',
+                    }}
                     alignItems='center'
                 >
                     <StageGlowVFX stage={stage} />
@@ -25,9 +39,19 @@ export const StageContent = ({ stage, hidden }) => {
                 <Divider />
                 <Grid
                     item
-                    sx={{ display: 'flex', pb: '10px' }}
+                    sx={{
+                        display: 'flex',
+                        gap: {
+                            xs: '20px',
+                            md: '0px',
+                        },
+                        pb: '10px',
+                    }}
                     justifyContent='space-evenly'
-                    flexDirection='row'
+                    flexDirection={{
+                        xs: 'column',
+                        md: 'row',
+                    }}
                     alignItems='center'
                 >
                     <ButtonGroup
@@ -42,9 +66,15 @@ export const StageContent = ({ stage, hidden }) => {
                 <Divider />
                 <Grid
                     item
-                    sx={{ display: 'flex', pt: '10px' }}
+                    sx={{
+                        display: 'flex',
+                        gap: {
+                            xs: '10px',
+                            md: '0px',
+                        },
+                        pt: '10px',
+                    }}
                     justifyContent='space-evenly'
-                    flexDirection='row'
                     alignItems='center'
                 >
                     <SelectCopy stage={stage} />

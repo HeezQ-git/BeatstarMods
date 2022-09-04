@@ -1,0 +1,50 @@
+{
+	"SongTemplate": {
+		"BaseColor": "cf5d7b",
+		"DarkColor": "a22452",
+		"ColorGradient": [
+			{ "color": "cf5d7b", "time": 0 },
+			{ "color": "c9345c", "time": 0.5000076293945313 },
+			{ "color": "a22452", "time": 1 }
+		],
+		"CheckpointOutlineColour": "cf5d7b",
+		"ColorGradientInGame": [
+			{ "color": "cf5d7b", "time": 0 },
+			{ "color": "a22452", "time": 1 }
+		],
+		"StreakConfig": [{
+				"glowColor": "a22452",
+				"perfectBarColor": "",
+				"invertPerfectBar": "false",
+				"VFXColor": "cf5d7b"
+			},
+			{
+				"glowColor": "a22452",
+				"perfectBarColor": "a15580",
+				"invertPerfectBar": "false",
+				"VFXColor": "cf5d7b"
+			},
+			{
+				"glowColor": "a22452",
+				"perfectBarColor": "a15580",
+				"invertPerfectBar": "false",
+				"VFXColor": "cf5d7b"
+			},
+			{
+				"glowColor": "a22452",
+				"perfectBarColor": "a15580",
+				"invertPerfectBar": "false",
+				"VFXColor": "cf5d7b"
+			},
+			{
+				"glowColor": "a22452",
+				"perfectBarColor": "a15580",
+				"invertPerfectBar": "false",
+				"VFXColor": "cf5d7b"
+			}
+		],
+		"TrackIntensityGlow": "a22452",
+		"VFXColor": "cf5d7b",
+		"VFXAlternativeColor": "a15580"
+	}
+}

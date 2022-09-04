@@ -13,7 +13,7 @@ export const ConfigNavigation = () => {
     const navigate = useNavigate();
 
     const handleStepChange = (nextStep) => {
-        if (step === amountOfSteps) {
+        if (step === amountOfSteps && nextStep === 1) {
             setLoading(true);
 
             setTimeout(() => {

@@ -51,6 +51,14 @@ export const ColorGradient = ({ configColorType, hidden }) => {
                     flexDirection='row'
                     justifyContent='space-evenly'
                     className={StepManagerStyles.root}
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexDirection: {
+                            xs: 'column',
+                            md: 'row',
+                        },
+                    }}
                 >
                     <div style={{ margin: '25px', width: '200px' }}>
                         <div
@@ -62,78 +70,100 @@ export const ColorGradient = ({ configColorType, hidden }) => {
                         />
                         <div className={StepManagerStyles.note}>* Note: in-game colors may differ from the preview</div>
                     </div>
-                    <DragDropContext onDragEnd={dragEnd}>
-                        <Droppable
-                            droppableId='droppable'
-                            direction='vertical'
-                        >
-                            {(provided) => (
-                                <div
-                                    {...provided.droppableProps}
-                                    ref={provided.innerRef}
-                                    className={StepManagerStyles.grid}
+                    <Grid
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            flexDirection: {
+                                xs: 'column',
+                                lg: 'row',
+                            },
+                            gap: '35px',
+                            width: {
+                                xs: '90%',
+                                md: '80%',
+                                lg: '60%',
+                                xl: '50%',
+                            },
+                        }}
+                    >
+                        <DragDropContext onDragEnd={dragEnd}>
+                            <Droppable
+                                droppableId='droppable'
+                                direction='vertical'
+                            >
+                                {(provided) => (
+                                    <Grid
+                                        {...provided.droppableProps}
+                                        ref={provided.innerRef}
+                                        className={StepManagerStyles.grid}
+                                        sx={{
+                                            width: '100%',
+                                            flexDirection: 'column',
+                                        }}
+                                    >
+                                        {filteredGradient.map((item, index) => (
+                                            <Draggable
+                                                key={`${item.id}`}
+                                                draggableId={`${item.id}`}
+                                                index={index}
+                                            >
+                                                {(draggableProvided, snapshot) => (
+                                                    <GridItem
+                                                        item={item}
+                                                        key={index}
+                                                        index={index}
+                                                        provided={draggableProvided}
+                                                        snapshot={snapshot}
+                                                    />
+                                                )}
+                                            </Draggable>
+                                        ))}
+                                        {provided.placeholder}
+                                    </Grid>
+                                )}
+                            </Droppable>
+                        </DragDropContext>
+                        <div className={StepManagerStyles.addColorIcon}>
+                            <Tooltip
+                                title='Add Color'
+                                placement='top'
+                            >
+                                <IconButton
+                                    disabled={filteredGradient.length >= 8}
+                                    onClick={() => {
+                                        const newColor = {
+                                            color: '#212121',
+                                            time: null,
+                                            id,
+                                        };
+                                        dispatch({
+                                            type: 'ADD_GRADIENT_COLOR',
+                                            payload: newColor,
+                                            configColorType,
+                                        });
+                                        setId((prevId) => prevId + 1);
+                                    }}
                                 >
-                                    {filteredGradient.map((item, index) => (
-                                        <Draggable
-                                            key={`${item.id}`}
-                                            draggableId={`${item.id}`}
-                                            index={index}
-                                        >
-                                            {(draggableProvided, snapshot) => (
-                                                <GridItem
-                                                    item={item}
-                                                    key={index}
-                                                    index={index}
-                                                    provided={draggableProvided}
-                                                    snapshot={snapshot}
-                                                />
-                                            )}
-                                        </Draggable>
-                                    ))}
-                                    {provided.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
-                    </DragDropContext>
-                    <div className={StepManagerStyles.addColorIcon}>
-                        <Tooltip
-                            title='Add Color'
-                            placement='top'
-                        >
-                            <IconButton
-                                disabled={filteredGradient.length >= 8}
-                                onClick={() => {
-                                    const newColor = {
-                                        color: '#212121',
-                                        time: null,
-                                        id,
-                                    };
-                                    dispatch({
-                                        type: 'ADD_GRADIENT_COLOR',
-                                        payload: newColor,
-                                        configColorType,
-                                    });
-                                    setId((prevId) => prevId + 1);
-                                }}
-                            >
-                                <MdOutlineAddCircleOutline />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title='Stops should be in ascending order'>
-                            <IconButton
-                                disabled={ascending}
-                                color='warning'
-                                onClick={() =>
-                                    dispatch({
-                                        type: 'GRADIENT_SORT',
-                                        configColorType,
-                                    })
-                                }
-                            >
-                                <MdOutlineWarningAmber />
-                            </IconButton>
-                        </Tooltip>
-                    </div>
+                                    <MdOutlineAddCircleOutline />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title='Stops should be in ascending order'>
+                                <IconButton
+                                    disabled={ascending}
+                                    color='warning'
+                                    onClick={() =>
+                                        dispatch({
+                                            type: 'GRADIENT_SORT',
+                                            configColorType,
+                                        })
+                                    }
+                                >
+                                    <MdOutlineWarningAmber />
+                                </IconButton>
+                            </Tooltip>
+                        </div>
+                    </Grid>
                 </Grid>
             </div>
         </ColorGradientContext.Provider>

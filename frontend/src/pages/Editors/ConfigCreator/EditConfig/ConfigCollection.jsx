@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { userService } from '../../../services/user.service';
+import { userService } from '../../../../services/user.service';
 import { DataGrid } from '@mui/x-data-grid';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip } from '@mui/material';
-import { MdAdd, MdDelete, MdEdit, MdRefresh } from 'react-icons/md';
-import { CollectionStyles } from './ConfigCreator.styles';
+import { MdOutlineAdd, MdOutlineDelete, MdOutlineEdit, MdRefresh } from 'react-icons/md';
+import { CollectionStyles } from '../ConfigCreator.styles';
 import { toast } from 'react-toastify';
 import { PropTypes } from 'prop-types';
 import moment from 'moment';
-import { routes } from '../../../config/routes';
+import { routes } from '../../../../config/routes';
 import { useNavigate } from 'react-router';
 
 export const ConfigCollection = ({ setSelectedConfigId }) => {
@@ -60,7 +60,7 @@ export const ConfigCollection = ({ setSelectedConfigId }) => {
                 <div style={{ display: 'flex', gap: '15px' }}>
                     <Button
                         variant='contained'
-                        startIcon={<MdEdit />}
+                        startIcon={<MdOutlineEdit />}
                         size='small'
                         onClick={() => setSelectedConfigId(params.row.id)}
                     >
@@ -69,7 +69,7 @@ export const ConfigCollection = ({ setSelectedConfigId }) => {
                     <Button
                         variant='contained'
                         color='error'
-                        startIcon={<MdDelete />}
+                        startIcon={<MdOutlineDelete />}
                         size='small'
                         onClick={() => setConfirmMenu(params.row.file)}
                     >
@@ -122,6 +122,7 @@ export const ConfigCollection = ({ setSelectedConfigId }) => {
 
     const handleEditCommit = async (params, event) => {
         if (!event.target.value || params.value === event.target.value) {
+            await getConfigs();
             return;
         }
 
@@ -190,21 +191,22 @@ export const ConfigCollection = ({ setSelectedConfigId }) => {
                     experimentalFeatures={{ newEditingApi: true }}
                     rowsPerPageOptions={[5, 10, 20]}
                     pageSize={pageSize}
-                    onPageSizeChange={(newPageSize) => {
-                        setPageSize(newPageSize);
-                    }}
+                    onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                     onCellEditStop={handleEditCommit}
                 />
             </Box>
             <Button
                 variant='contained'
-                startIcon={<MdAdd />}
+                startIcon={<MdOutlineAdd />}
                 sx={{ marginTop: '15px' }}
                 onClick={() => navigate(routes.configCreator)}
             >
                 Create new
             </Button>
-            <Dialog open={!!confirmMenu}>
+            <Dialog
+                open={!!confirmMenu}
+                onClose={() => setConfirmMenu(null)}
+            >
                 <DialogTitle>Confirm action</DialogTitle>
                 <DialogContent>Please remember that this process is irreversible</DialogContent>
                 <DialogActions>
@@ -216,7 +218,7 @@ export const ConfigCollection = ({ setSelectedConfigId }) => {
                     </Button>
                     <Button
                         variant='contained'
-                        startIcon={<MdDelete />}
+                        startIcon={<MdOutlineDelete />}
                         onClick={handleDelete}
                     >
                         Delete

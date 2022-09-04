@@ -1,10 +1,10 @@
-import { MdDelete, MdDragIndicator, MdEdit, MdUndo } from 'react-icons/md';
+import { MdOutlineDelete, MdDragIndicator, MdOutlineEdit, MdUndo } from 'react-icons/md';
 import { createPortal } from 'react-dom';
 import { EditDialog } from './StepTwoDialog';
 import { useContext, useState } from 'react';
 import { ConfigContext } from '../../ConfigCreator';
 import { StepManagerStyles } from '../../ConfigCreator.styles';
-import { Button, IconButton, Paper, Tooltip } from '@mui/material';
+import { Button, Grid, IconButton, Paper, Tooltip } from '@mui/material';
 import { portal } from '../StepTwo';
 import { PropTypes } from 'prop-types';
 import { Slide, toast } from 'react-toastify';
@@ -52,10 +52,29 @@ export const GridItem = ({ item, provided, snapshot }) => {
         <Paper
             elevation={usePortal ? 16 : 8}
             className={StepManagerStyles.gridBox}
+            sx={{
+                height: {
+                    xs: '80px',
+                    lg: '55px',
+                },
+                width: {
+                    xs: '90%',
+                    lg: '100%',
+                },
+            }}
             ref={provided.innerRef}
             {...provided.draggableProps}
         >
-            <div className={StepManagerStyles.gridItem}>
+            <Grid
+                className={StepManagerStyles.gridItem}
+                sx={{
+                    display: 'flex',
+                    flexDirection: {
+                        xs: 'column',
+                        lg: 'row',
+                    },
+                }}
+            >
                 <div className={StepManagerStyles.color}>
                     <div className={StepManagerStyles.showcaseColor(item.color)} />
                     <Tooltip title='Color'>
@@ -65,10 +84,20 @@ export const GridItem = ({ item, provided, snapshot }) => {
                         <div>{Math.round(item.time * 100, 2)}%</div>
                     </Tooltip>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Grid
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: {
+                            xs: '10px',
+                            md: '0px',
+                        },
+                    }}
+                >
                     <Tooltip title='Edit'>
                         <IconButton onClick={() => setDialogOpen(true)}>
-                            <MdEdit />
+                            <MdOutlineEdit />
                         </IconButton>
                     </Tooltip>
                     <Tooltip title='Delete'>
@@ -98,19 +127,22 @@ export const GridItem = ({ item, provided, snapshot }) => {
                                 );
                             }}
                         >
-                            <MdDelete />
+                            <MdOutlineDelete />
                         </IconButton>
                     </Tooltip>
-                    <div {...provided.dragHandleProps}>
+                    <div
+                        style={{ display: 'flex' }}
+                        {...provided.dragHandleProps}
+                    >
                         <MdDragIndicator fontSize={20} />
                     </div>
-                </div>
+                </Grid>
                 <EditDialog
                     item={item}
                     open={dialogOpen}
                     setDialogOpen={setDialogOpen}
                 />
-            </div>
+            </Grid>
         </Paper>
     );
 

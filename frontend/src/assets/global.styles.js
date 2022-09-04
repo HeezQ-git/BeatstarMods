@@ -138,4 +138,11 @@ export const GS = {
     textCenter: css`
         text-align: center;
     `,
+    center: css`
+        display: flex;
+        align-items: center;
+    `,
+    gap: (size = 4) => css`
+        gap: ${size}px;
+    `,
 };

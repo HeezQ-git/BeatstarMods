@@ -9,7 +9,10 @@ export const StepFour = () => {
                 item
                 sx={{ display: 'flex', pb: '10px' }}
                 justifyContent='space-evenly'
-                flexDirection='row'
+                flexDirection={{
+                    xs: 'column',
+                    md: 'row',
+                }}
                 alignItems='center'
             >
                 <ButtonGroup

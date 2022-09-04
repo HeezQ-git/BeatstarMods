@@ -1,11 +1,12 @@
 import { Box, Paper } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { MdSaveAlt, MdUploadFile } from 'react-icons/md';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
-import { routes } from '../../../config/routes';
-import { userService } from '../../../services/user.service';
-import { isJsonValid } from '../../../utils/functions';
+import { routes } from '../../../../config/routes';
+import { userService } from '../../../../services/user.service';
+import { isJsonValid } from '../../../../utils/functions';
 
 const baseStyle = {
     display: 'flex',
@@ -84,9 +85,13 @@ export const UploadConfig = () => {
             >
                 <input {...getInputProps()} />
                 {isDragActive && !isDragReject ? (
-                    <b>Drop your config.json here!</b>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <MdSaveAlt fontSize={20} /> Drop your config here
+                    </span>
                 ) : (
-                    <p>Drag and drop your config.json file here!</p>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <MdUploadFile fontSize={20} /> Drag and drop your config.json file here!
+                    </span>
                 )}
             </Box>
             <p style={{ marginTop: '15px', opacity: 0.4, userSelect: 'none' }}>

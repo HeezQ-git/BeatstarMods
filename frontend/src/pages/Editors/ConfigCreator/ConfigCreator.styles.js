@@ -89,11 +89,9 @@ export const StepManagerStyles = {
         justify-content: flex-start;
         gap: 20px;
         margin-top: 40px;
-        width: 60%;
     `,
     gridBox: css`
         width: 80%;
-        height: 55px;
         padding: 10px;
     `,
     gridItem: css`
