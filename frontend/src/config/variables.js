@@ -59,6 +59,7 @@ export const uploadSongInitialState = {
     image: '',
     imageName: '',
     title: '',
+    difficulty: '',
     artists: [],
     bpm: 120,
     duration: '',
@@ -66,3 +67,10 @@ export const uploadSongInitialState = {
     tags: [],
     description: '',
 };
+
+export const difficulties = [
+    { value: 'normal', label: 'Normal' },
+    { value: 'hard', label: 'Hard' },
+    { value: 'extreme', label: 'Extreme' },
+    { value: 'insane', label: 'Insane' },
+];

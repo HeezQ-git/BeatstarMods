@@ -1,16 +1,37 @@
-import { Autocomplete, Box, Grid, TextField } from '@mui/material';
+import {
+    Autocomplete,
+    Box,
+    FormControl,
+    Grid,
+    InputLabel,
+    ListItemIcon,
+    ListItemText,
+    MenuItem,
+    Select,
+    TextField,
+} from '@mui/material';
 import React, { useContext, useMemo, useRef, useState } from 'react';
 import { UploadSongContext } from './UploadSong';
 import JoditEditor from 'jodit-react';
 import { AppContext } from '../../../App';
+import HardIcon from '../../../assets/icons/hard.png';
+import ExtremeIcon from '../../../assets/icons/extreme.png';
+import InsaneIcon from '../../../assets/icons/insane.png';
+import { difficulties } from '../../../config/variables';
+
+const icons = {
+    hard: HardIcon,
+    extreme: ExtremeIcon,
+    insane: InsaneIcon,
+};
 
 export const UploadSongForm = () => {
     const { state, dispatch } = useContext(UploadSongContext);
     const { mode } = useContext(AppContext);
 
-    const [artistsList, setArtistsList] = useState(['Hello', 'World']);
+    const [artistsList] = useState(['Hello', 'World']);
 
-    const { title, artists, bpm, tags, description } = state;
+    const { title, difficulty, artists, bpm, tags, description } = state;
 
     const editor = useRef(null);
 
@@ -29,6 +50,19 @@ export const UploadSongForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
     };
+
+    const descriptionComponent = useMemo(
+        () => (
+            <JoditEditor
+                ref={editor}
+                value={description}
+                config={config}
+                tabIndex={1}
+                onBlur={(newContent) => dispatch({ type: 'SET_FIELD', field: 'description', payload: newContent })}
+            />
+        ),
+        [description],
+    );
 
     return (
         <Grid>
@@ -50,27 +84,82 @@ export const UploadSongForm = () => {
                         maxWidth='600px'
                         gap='15px'
                     >
-                        <TextField
-                            label='Title'
-                            value={title}
-                            onChange={(e) =>
-                                dispatch({
-                                    type: 'SET_FIELD',
-                                    field: 'title',
-                                    payload: e.target.value,
-                                })
-                            }
-                            required
-                        />
-                        <JoditEditor
-                            ref={editor}
-                            value={description}
-                            config={config}
-                            tabIndex={1}
-                            onBlur={(newContent) =>
-                                dispatch({ type: 'SET_FIELD', field: 'description', payload: newContent })
-                            }
-                        />
+                        <Grid
+                            display='flex'
+                            gap='10px'
+                            width='100%'
+                        >
+                            <TextField
+                                label='Title'
+                                value={title}
+                                onChange={(e) =>
+                                    dispatch({
+                                        type: 'SET_FIELD',
+                                        field: 'title',
+                                        payload: e.target.value,
+                                    })
+                                }
+                                fullWidth
+                                required
+                            />
+                            <FormControl
+                                fullWidth
+                                required
+                            >
+                                <InputLabel>Difficulty</InputLabel>
+                                <Select
+                                    onChange={(e) =>
+                                        dispatch({
+                                            type: 'SET_FIELD',
+                                            field: 'difficulty',
+                                            payload: e.target.value,
+                                        })
+                                    }
+                                    value={difficulty}
+                                    renderValue={(selected) => (
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '5px',
+                                            }}
+                                        >
+                                            {icons?.[selected] && (
+                                                <img
+                                                    src={icons[selected]}
+                                                    alt={selected}
+                                                    style={{
+                                                        width: '20px',
+                                                        height: '20px',
+                                                    }}
+                                                />
+                                            )}
+                                            {difficulties.find((d) => d.value === selected).label}
+                                        </div>
+                                    )}
+                                >
+                                    {difficulties.map((diff) => (
+                                        <MenuItem
+                                            key={diff.value}
+                                            value={diff.value}
+                                        >
+                                            {icons?.[diff.value] && (
+                                                <ListItemIcon>
+                                                    <img
+                                                        src={icons[diff.value]}
+                                                        alt={diff.value}
+                                                        width='20px'
+                                                        height='20px'
+                                                    />
+                                                </ListItemIcon>
+                                            )}
+                                            <ListItemText primary={diff.label} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        {descriptionComponent}
                     </Box>
                     <Grid
                         display='flex'
