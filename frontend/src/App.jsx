@@ -85,6 +85,7 @@ function App() {
 
     const AppContextValues = {
         isMobile,
+        mode,
     };
 
     return (

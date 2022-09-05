@@ -54,3 +54,15 @@ export const baseConfigTypes = {
     VFXColor: '#916179',
     VFXAlternativeColor: '#C895AD',
 };
+
+export const uploadSongInitialState = {
+    image: '',
+    imageName: '',
+    title: '',
+    artists: [],
+    bpm: 120,
+    duration: '',
+    genre: [],
+    tags: [],
+    description: '',
+};

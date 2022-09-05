@@ -30,7 +30,6 @@
         "no-constant-condition": 1,
         "curly": 2,
         "object-curly-spacing": ["warn", "always"],
-        "indent": ["warn", 4],
         "no-unused-vars": 1,
         "react/jsx-first-prop-new-line": [2, "multiline"],
         "react/jsx-max-props-per-line": [2, { "maximum": 2, "when": "multiline" }]

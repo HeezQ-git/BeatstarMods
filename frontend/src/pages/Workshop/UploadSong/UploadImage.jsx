@@ -26,7 +26,8 @@ const showcaseImageSize = 204;
 
 export const UploadImage = () => {
     const [borderColor, setBorderColor] = useState('');
-    const { image, setImage, imageName, setImageName } = useContext(UploadSongContext);
+    const { state, dispatch } = useContext(UploadSongContext);
+    const { image, imageName } = state;
 
     const onDrop = useCallback((acceptedFiles) => {
         const reader = new FileReader();
@@ -37,9 +38,18 @@ export const UploadImage = () => {
             img.src = reader.result;
 
             img.onload = () => {
-                if (img.width === imageSize && img.height === imageSize) {
-                    setImageName(acceptedFiles[0].name);
-                    setImage(reader.result);
+                // check if image size is under 2MB
+                if (img.width === imageSize && img.height === imageSize && acceptedFiles[0].size < 2000000) {
+                    dispatch({
+                        type: 'SET_FIELD',
+                        field: 'image',
+                        payload: reader.result,
+                    });
+                    dispatch({
+                        type: 'SET_FIELD',
+                        field: 'imageName',
+                        payload: acceptedFiles[0].name,
+                    });
                 } else {
                     toast.error('Invalid image file!');
                 }
@@ -67,8 +77,7 @@ export const UploadImage = () => {
             elevation={6}
             sx={{
                 padding: '10px',
-                marginTop: '15px',
-                height: 'auto',
+                height: 'max-content',
                 width: `${showcaseImageSize}px`,
                 borderRadius: '5px',
             }}
@@ -93,8 +102,8 @@ export const UploadImage = () => {
             elevation={6}
             sx={{
                 padding: '10px',
-                marginTop: '15px',
                 width: `${showcaseImageSize}px`,
+                height: 'max-content',
                 borderRadius: '5px',
             }}
         >
