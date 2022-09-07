@@ -29,10 +29,9 @@ export const EditConfig = () => {
             <Grid
                 item
                 xs={12}
-                sm={10}
-                md={9}
-                lg={8}
-                xl={7}
+                md={12}
+                lg={10}
+                xl={8}
                 py={{
                     xs: 2,
                 }}

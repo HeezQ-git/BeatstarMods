@@ -280,10 +280,40 @@ const updateConfig = async (req, res) => {
     return res.status(response.errorInfo?.msg ? 550 : 200).json(response);
 };
 
+const getUser = async (req, res) => {
+    let response = {
+        success: false,
+        errorInfo: '',
+        user: {},
+    };
+
+    try {
+        const { user } = req.user;
+        const userDB = await users.findOne({ username: user.username });
+
+        if (userDB) {
+            response.success = true;
+            response.user = {
+                username: userDB.username,
+                email: userDB.email,
+                isVerified: userDB.isVerified,
+            };
+        } else {
+            response.errorInfo = getError('user', 'USER_NOT_EXIST');
+        }
+    } catch (err) {
+        response.errorInfo = getError('other', 'UNEXPECTED');
+        response.error = err;
+    }
+
+    return res.status(response.errorInfo?.msg ? 550 : 200).json(response);
+};
+
 module.exports = {
     saveConfig,
     getConfig,
     getConfigs,
     deleteConfig,
     updateConfig,
+    getUser,
 };

@@ -39,6 +39,10 @@ const usersSchema = new Schema({
             },
         ],
     },
+    isVerified: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const users = mongoose.model('users', usersSchema);

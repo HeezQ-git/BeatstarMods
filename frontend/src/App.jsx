@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 
 // Global imports
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import './assets/global.css';
 
 // MUI v5
@@ -40,12 +40,14 @@ import { MdClose } from 'react-icons/md';
 import { useCookies } from 'react-cookie';
 import { Workshop } from './pages/Workshop/Workshop';
 import { UploadSong } from './pages/Workshop/UploadSong/UploadSong';
+import { userService } from './services/user.service';
 
 export const AppContext = createContext();
 
 function App() {
     const [cookies, setCookie] = useCookies(['mobile-device-warning']);
     const [mode, setMode] = useState(cookies.theme ? cookies.theme : 'light');
+    const [user, setUser] = useState({});
 
     const isMobile = window.innerWidth <= 575;
 
@@ -80,12 +82,21 @@ function App() {
     };
 
     if (!cookies.theme) {
-        setCookie('theme', 'light', { path: '/' });
+        setCookie('theme', 'dark', { path: '/' });
     }
+
+    useEffect(() => {
+        (async () => {
+            const { data } = await userService.getUser();
+
+            setUser(data.user);
+        })();
+    }, []);
 
     const AppContextValues = {
         isMobile,
         mode,
+        user,
     };
 
     return (

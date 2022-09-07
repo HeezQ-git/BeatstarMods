@@ -90,7 +90,7 @@ export const UploadImage = () => {
             >
                 <input {...getInputProps()} />
                 <span className={[GS.textCenter, GS.center, GS.gap(4)].join(' ')}>
-                    <MdOutlineImage fontSize={30} /> Drop your image here
+                    <MdOutlineImage fontSize={30} /> * Drop your image here
                 </span>
             </Box>
             <p style={{ fontSize: '13px', marginTop: '10px', opacity: 0.4, userSelect: 'none' }}>
