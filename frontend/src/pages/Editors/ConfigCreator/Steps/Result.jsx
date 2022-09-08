@@ -47,7 +47,7 @@ export const Result = () => {
                         success: `Config ${name ? `"${name}"` : ''} saved!`,
                         error: {
                             render({ data }) {
-                                return `${data.response.data.errorInfo.msg}`;
+                                return `${data?.response?.data?.errorInfo?.msg}`;
                             },
                         },
                     },
@@ -67,7 +67,7 @@ export const Result = () => {
                         success: `Config ${name ? `"${name}"` : ''} updated!`,
                         error: {
                             render({ data }) {
-                                return `${data.response.data.errorInfo.msg}`;
+                                return `${data?.response?.data?.errorInfo?.msg}`;
                             },
                         },
                     },
@@ -76,7 +76,7 @@ export const Result = () => {
                     },
                 );
 
-                if (data.success) {
+                if (data?.success) {
                     setSaved(true);
                 }
             }
