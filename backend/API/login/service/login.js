@@ -28,6 +28,7 @@ const loginUser = async (req, res) => {
                     response.token = signToken({
                         username: user.username,
                         email: user.email,
+                        userId: user._id,
                     });
                 } else
                     response = {
@@ -91,6 +92,7 @@ const registerUser = async (req, res) => {
                     username: newUser.username,
                     email: newUser.email,
                     discordId: newUser?.discord?.id || '',
+                    userId: newUser._id,
                 });
             } else
                 response = {

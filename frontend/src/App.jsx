@@ -20,7 +20,7 @@ import { EditConfig } from './pages/Editors/ConfigCreator/EditConfig/EditConfig'
 import { Header } from './pages/Header/Header';
 
 // Routes and routes
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { routes } from './config/routes';
 
 // Toastify
@@ -41,13 +41,16 @@ import { useCookies } from 'react-cookie';
 import { Workshop } from './pages/Workshop/Workshop';
 import { UploadSong } from './pages/Workshop/UploadSong/UploadSong';
 import { userService } from './services/user.service';
+import { remove } from 'lodash';
 
 export const AppContext = createContext();
 
 function App() {
-    const [cookies, setCookie] = useCookies(['mobile-device-warning']);
+    const [cookies, setCookie, removeCookie] = useCookies(['mobile-device-warning']);
     const [mode, setMode] = useState(cookies.theme ? cookies.theme : 'light');
     const [user, setUser] = useState({});
+
+    const navigate = useNavigate();
 
     const isMobile = window.innerWidth <= 575;
 
@@ -89,6 +92,11 @@ function App() {
         (async () => {
             const { data } = await userService.getUser();
 
+            if (!data.user && cookies['token']) {
+                removeCookie('token');
+                navigate(routes.login);
+            }
+
             setUser(data.user);
         })();
     }, []);
@@ -100,7 +108,6 @@ function App() {
     };
 
     return (
-        <BrowserRouter>
             <AppContext.Provider value={AppContextValues}>
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
@@ -174,7 +181,6 @@ function App() {
                     </div>
                 </ThemeProvider>
             </AppContext.Provider>
-        </BrowserRouter>
     );
 }
 

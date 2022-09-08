@@ -19,6 +19,9 @@ import ExtremeIcon from '../../../assets/icons/extreme.png';
 import InsaneIcon from '../../../assets/icons/insane.png';
 import { difficulties } from '../../../config/variables';
 import { toast } from 'react-toastify';
+import { workshopService } from '../../../services/workshop.service';
+import { routes } from '../../../config/routes';
+import { useNavigate } from 'react-router';
 
 const icons = {
     hard: HardIcon,
@@ -32,6 +35,9 @@ const icons = {
 export const UploadSongForm = () => {
     const { state, dispatch } = useContext(UploadSongContext);
     const { mode } = useContext(AppContext);
+    const [uploading, setUploading] = useState(false);
+
+    const navigate = useNavigate();
 
     const [artistsList] = useState(['Ariana Grande', 'Katy Perry']);
     const [genresList] = useState([
@@ -59,7 +65,7 @@ export const UploadSongForm = () => {
         'Indie',
     ]);
 
-    const { image, title, difficulty, artists, bpm, genre, duration, description } = state;
+    const { image, imageName, title, difficulty, artists, bpm, genre, duration, description } = state;
 
     const editor = useRef(null);
 
@@ -75,12 +81,42 @@ export const UploadSongForm = () => {
             'bold,italic,underline,strikethrough,eraser,ul,ol,fontsize,paragraph,classSpan,lineHeight,superscript,subscript,file,spellcheck,cut,copy',
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (uploading) {
+            return;
+        }
+
+        setUploading(true);
 
         if (!image) {
             return toast.error('Please upload an image');
         }
+
+        const { data } = await toast.promise(
+            workshopService.uploadSong({
+                image,
+                imageName,
+                title,
+                difficulty,
+                artists,
+                bpm,
+                genre,
+                duration,
+                description: description === '<p><br></p>' ? '' : description,
+            }),
+            {
+                pending: 'Uploading song...',
+                success: 'Song uploaded successfully',
+                error: 'Error uploading song',
+            },
+            {
+                toastId: 'uploadSong',
+            }
+        );
+
+        navigate(routes.workshopSong.replace(':songId', data.songId));
     };
 
     const descriptionComponent = useMemo(

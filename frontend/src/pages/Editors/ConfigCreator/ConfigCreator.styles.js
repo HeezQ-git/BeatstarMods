@@ -88,7 +88,6 @@ export const StepManagerStyles = {
         align-items: center;
         justify-content: flex-start;
         gap: 20px;
-        margin-top: 40px;
     `,
     gridBox: css`
         width: 80%;

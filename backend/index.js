@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const config = require('./config');
 const loginApi = require('./API/login');
 const userApi = require('./API/user');
+const workshopApi = require('./API/workshop');
 
 const app = express();
 
@@ -18,22 +19,7 @@ app.use(cookieParser());
 
 app.use(loginApi);
 app.use(userApi);
-
-// const fileupload = require('express-fileupload');
-// app.use(fileupload());
-// app.post('/upload', (req, res) => {
-//     const newpath = __dirname + '/files/';
-//     const file = req.files.file;
-//     const filename = file.name;
-
-//     file.mv(`${newpath}${filename}`, (err) => {
-//         console.log(err);
-//         if (err) {
-//             res.status(500).send({ message: 'File upload failed', code: 500 });
-//         }
-//         res.status(200).send({ message: 'File Uploaded', code: 200 });
-//     });
-// });
+app.use(workshopApi);
 
 app.listen(8000, () => {
     console.log('Server running successfully on 8000');

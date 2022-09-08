@@ -3,7 +3,7 @@ const fs = require('fs');
 const { getError } = require('../../../utils/getError');
 
 const saveConfig = async (req, res) => {
-    let result = {
+    let response = {
         success: false,
         errorInfo: '',
     };
@@ -58,11 +58,11 @@ const saveConfig = async (req, res) => {
                             req.body.config,
                             (err) => {
                                 if (err) {
-                                    result.errorInfo = getError(
+                                    response.errorInfo = getError(
                                         'user',
                                         'SAVE_CONFIG_FAILED'
                                     );
-                                    return res.status(500).send(result);
+                                    return res.status(500).send(response);
                                 }
                             }
                         );
@@ -75,39 +75,39 @@ const saveConfig = async (req, res) => {
 
                         await userDB.save();
 
-                        result.success = true;
-                        result.configId =
+                        response.success = true;
+                        response.configId =
                             userDB.files.config[
                                 userDB.files.config.length - 1
                             ]._id.toString();
                     } else {
-                        result.errorInfo = getError(
+                        response.errorInfo = getError(
                             'user',
                             'CONFIG_ALREADY_EXISTS'
                         );
                     }
                 } else {
-                    result.errorInfo = getError(
+                    response.errorInfo = getError(
                         'user',
                         'CONFIG_NAME_TOO_SHORT'
                     );
                 }
             } else {
-                result.errorInfo = getError('user', 'FILE_NAME_TAKEN');
+                response.errorInfo = getError('user', 'FILE_NAME_TAKEN');
             }
         } else {
-            result.errorInfo = getError('user', 'USER_NOT_EXIST');
+            response.errorInfo = getError('user', 'USER_NOT_EXIST');
         }
     } catch (err) {
-        result.errorInfo = getError('other', 'UNEXPECTED');
+        response.errorInfo = getError('other', 'UNEXPECTED');
         console.log(err);
     }
 
-    return res.status(result.errorInfo?.msg ? 550 : 200).json(result);
+    return res.status(response.errorInfo?.msg ? 550 : 200).json(response);
 };
 
 const getConfig = async (req, res) => {
-    let result = {
+    let response = {
         success: false,
         errorInfo: '',
         config: {},
@@ -124,30 +124,30 @@ const getConfig = async (req, res) => {
             );
 
             if (config) {
-                result.success = true;
+                response.success = true;
 
-                result.config = JSON.parse(
+                response.config = JSON.parse(
                     fs.readFileSync(
                         `./files/${user.username}/config/${config.file}.json`
                     )
                 );
 
-                result.configName = config.name;
+                response.configName = config.name;
             } else {
-                result.errorInfo = getError('user', 'FILE_NOT_EXIST');
+                response.errorInfo = getError('user', 'FILE_NOT_EXIST');
             }
         } else {
-            result.errorInfo = getError('user', 'USER_NOT_EXIST');
+            response.errorInfo = getError('user', 'USER_NOT_EXIST');
         }
     } catch (err) {
-        result.errorInfo = getError('other', 'UNEXPECTED');
+        response.errorInfo = getError('other', 'UNEXPECTED');
     }
 
-    return res.status(result.errorInfo?.msg ? 550 : 200).json(result);
+    return res.status(response.errorInfo?.msg ? 550 : 200).json(response);
 };
 
 const getConfigs = async (req, res) => {
-    let result = {
+    let response = {
         success: false,
         errorInfo: '',
         configs: [],
@@ -158,27 +158,27 @@ const getConfigs = async (req, res) => {
         const userDB = await users.findOne({ username: user.username });
 
         if (userDB) {
-            result.configs = [...userDB.files.config].map((config) => ({
+            response.configs = [...userDB.files.config].map((config) => ({
                 ...config._doc,
                 fileValue: fs.readFileSync(
                     `./files/${user.username}/config/${config.file}.json`,
                     'utf8'
                 ),
             }));
-            result.success = true;
+            response.success = true;
         } else {
-            result.errorInfo = getError('user', 'USER_NOT_EXIST');
+            response.errorInfo = getError('user', 'USER_NOT_EXIST');
         }
     } catch (err) {
-        result.errorInfo = getError('other', 'UNEXPECTED');
-        result.error = err;
+        response.errorInfo = getError('other', 'UNEXPECTED');
+        response.error = err;
     }
 
-    return res.status(result.errorInfo?.msg ? 550 : 200).json(result);
+    return res.status(response.errorInfo?.msg ? 550 : 200).json(response);
 };
 
 const deleteConfig = async (req, res) => {
-    let result = {
+    let response = {
         success: false,
         errorInfo: '',
     };
@@ -203,23 +203,23 @@ const deleteConfig = async (req, res) => {
 
                 await userDB.save();
 
-                result.success = true;
+                response.success = true;
             } else {
-                result.errorInfo = getError('user', 'FILE_NOT_EXIST');
+                response.errorInfo = getError('user', 'FILE_NOT_EXIST');
             }
         } else {
-            result.errorInfo = getError('user', 'USER_NOT_EXIST');
+            response.errorInfo = getError('user', 'USER_NOT_EXIST');
         }
     } catch (err) {
-        result.errorInfo = getError('other', 'UNEXPECTED');
-        result.error = err;
+        response.errorInfo = getError('other', 'UNEXPECTED');
+        response.error = err;
     }
 
-    return res.status(result.errorInfo?.msg ? 550 : 200).json(result);
+    return res.status(response.errorInfo?.msg ? 550 : 200).json(response);
 };
 
 const updateConfig = async (req, res) => {
-    let result = {
+    let response = {
         success: false,
         errorInfo: '',
     };
@@ -241,12 +241,12 @@ const updateConfig = async (req, res) => {
                             req.body.config,
                             (err) => {
                                 if (err) {
-                                    result.errorInfo = getError(
+                                    response.errorInfo = getError(
                                         'user',
                                         'SAVE_CONFIG_FAILED'
                                     );
 
-                                    return res.status(500).send(result);
+                                    return res.status(500).send(response);
                                 }
                             }
                         );
@@ -259,29 +259,29 @@ const updateConfig = async (req, res) => {
 
                     await userDB.save();
 
-                    result.success = true;
+                    response.success = true;
                 } else {
-                    result.errorInfo = getError(
+                    response.errorInfo = getError(
                         'user',
                         'CONFIG_NAME_TOO_SHORT'
                     );
                 }
             } else {
-                result.errorInfo = getError('user', 'FILE_NOT_EXIST');
+                response.errorInfo = getError('user', 'FILE_NOT_EXIST');
             }
         } else {
-            result.errorInfo = getError('user', 'USER_NOT_EXIST');
+            response.errorInfo = getError('user', 'USER_NOT_EXIST');
         }
     } catch (err) {
-        result.errorInfo = getError('other', 'UNEXPECTED');
-        result.error = err;
+        response.errorInfo = getError('other', 'UNEXPECTED');
+        response.error = err;
     }
 
-    return res.status(result.errorInfo?.msg ? 550 : 200).json(result);
+    return res.status(response.errorInfo?.msg ? 550 : 200).json(response);
 };
 
 const getUser = async (req, res) => {
-    let result = {
+    let response = {
         success: false,
         errorInfo: '',
         user: null,
@@ -292,21 +292,21 @@ const getUser = async (req, res) => {
         const userDB = await users.findOne({ username: user.username });
 
         if (userDB) {
-            result.success = true;
-            result.user = {
+            response.success = true;
+            response.user = {
                 username: userDB.username,
                 email: userDB.email,
                 isVerified: userDB.isVerified,
             };
         } else {
-            result.errorInfo = getError('user', 'USER_NOT_EXIST');
+            response.errorInfo = getError('user', 'USER_NOT_EXIST');
         }
     } catch (err) {
-        result.errorInfo = getError('other', 'UNEXPECTED');
-        result.error = err;
+        response.errorInfo = getError('other', 'UNEXPECTED');
+        response.error = err;
     }
 
-    return res.status(result.errorInfo?.msg ? 550 : 200).json(result);
+    return res.status(response.errorInfo?.msg ? 550 : 200).json(response);
 };
 
 module.exports = {

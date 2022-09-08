@@ -9,5 +9,6 @@ export const routes = {
     editConfigId: '/editors/config-file/edit/:configId',
     profile: '/profile',
     workshop: '/workshop',
+    workshopSong: '/workshop/song/:songId',
     uploadSong: '/workshop/upload-song',
 };
