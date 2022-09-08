@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const userService = {
+    getUser: () => axios.get('/api/user'),
     saveConfig: (data) => axios.post('/api/user/save-config', data),
     getConfig: (data) => axios.post('/api/user/get-config', data),
     getConfigs: () => axios.get('/api/user/get-configs'),

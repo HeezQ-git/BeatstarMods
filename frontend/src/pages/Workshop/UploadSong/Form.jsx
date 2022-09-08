@@ -18,20 +18,48 @@ import HardIcon from '../../../assets/icons/hard.png';
 import ExtremeIcon from '../../../assets/icons/extreme.png';
 import InsaneIcon from '../../../assets/icons/insane.png';
 import { difficulties } from '../../../config/variables';
+import { toast } from 'react-toastify';
 
 const icons = {
     hard: HardIcon,
+    hardPlus: HardIcon,
     extreme: ExtremeIcon,
+    extremePlus: ExtremeIcon,
     insane: InsaneIcon,
+    insanePlus: InsaneIcon,
 };
 
 export const UploadSongForm = () => {
     const { state, dispatch } = useContext(UploadSongContext);
     const { mode } = useContext(AppContext);
 
-    const [artistsList] = useState(['Hello', 'World']);
+    const [artistsList] = useState(['Ariana Grande', 'Katy Perry']);
+    const [genresList] = useState([
+        'Pop',
+        'Rock',
+        'Rap',
+        'Dance',
+        'Hip Hop',
+        'R&B',
+        'Country',
+        'EDM',
+        'Jazz',
+        'Classical',
+        'Metal',
+        'Folk',
+        'Reggae',
+        'Soul',
+        'Blues',
+        'Punk',
+        'Funk',
+        'Disco',
+        'Techno',
+        'House',
+        'Trance',
+        'Indie',
+    ]);
 
-    const { title, difficulty, artists, bpm, tags, description } = state;
+    const { image, title, difficulty, artists, bpm, genre, duration, description } = state;
 
     const editor = useRef(null);
 
@@ -49,6 +77,10 @@ export const UploadSongForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (!image) {
+            return toast.error('Please upload an image');
+        }
     };
 
     const descriptionComponent = useMemo(
@@ -187,6 +219,7 @@ export const UploadSongForm = () => {
                             multiple
                             freeSolo
                             fullWidth
+                            required
                         />
                         <TextField
                             label='BPM'
@@ -205,18 +238,83 @@ export const UploadSongForm = () => {
                         />
                     </Grid>
                     <Box width='100%'>
-                        <TextField
-                            label='Tags'
-                            value={tags}
-                            onChange={(e) =>
-                                dispatch({
-                                    type: 'SET_FIELD',
-                                    field: 'tags',
-                                    payload: e.target.value,
-                                })
-                            }
-                            fullWidth
-                        />
+                        <FormControl fullWidth>
+                            <InputLabel>Genre(s)</InputLabel>
+                            <Select
+                                onChange={(e) =>
+                                    dispatch({
+                                        type: 'SET_FIELD',
+                                        field: 'genre',
+                                        payload: e.target.value,
+                                    })
+                                }
+                                value={genre}
+                                multiple
+                                renderValue={(selected) => selected.join(', ')}
+                            >
+                                {genresList.map((_genre) => (
+                                    <MenuItem
+                                        key={_genre}
+                                        value={_genre}
+                                    >
+                                        <ListItemText primary={_genre} />
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <Box
+                        display='flex'
+                        alignItems='center'
+                        gap='20px'
+                        width={{
+                            xs: '100%',
+                            md: '65%',
+                        }}
+                    >
+                        <span>Duration</span>
+                        <Grid
+                            display='flex'
+                            gap='20px'
+                            width='100%'
+                        >
+                            <TextField
+                                label='Minutes'
+                                value={duration?.minutes}
+                                type='number'
+                                onChange={(e) =>
+                                    e.target.value >= 0 &&
+                                    e.target.value < 60 &&
+                                    dispatch({
+                                        type: 'SET_FIELD',
+                                        field: 'duration',
+                                        payload: {
+                                            ...duration,
+                                            minutes: e.target.value,
+                                        },
+                                    })
+                                }
+                                fullWidth
+                            />
+                            <TextField
+                                label='Seconds'
+                                value={duration?.seconds}
+                                type='number'
+                                onChange={(e) =>
+                                    e.target.value >= 0 &&
+                                    e.target.value < 60 &&
+                                    dispatch({
+                                        type: 'SET_FIELD',
+                                        field: 'duration',
+                                        payload: {
+                                            ...duration,
+                                            seconds: e.target.value,
+                                        },
+                                    })
+                                }
+                                fullWidth
+                            />
+                        </Grid>
                     </Box>
                 </Grid>
             </form>
